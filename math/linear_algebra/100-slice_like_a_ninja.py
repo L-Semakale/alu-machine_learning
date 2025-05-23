@@ -2,7 +2,6 @@
 """
 Slice numpy arrays
 """
-import numpy as np
 
 
 def np_slice(matrix, axes=None):
