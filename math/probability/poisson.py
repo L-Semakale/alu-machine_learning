@@ -1,83 +1,94 @@
 #!/usr/bin/env python3
-"""Defines Poisson class that represents Poisson distribution"""
+""" defines Poisson class that represents Poisson distribution """
 
 
 class Poisson:
     """
-    Represents a Poisson distribution.
+    class that represents Poisson distribution
 
-    Attributes:
-        lambtha (float): The expected number of occurrences in a given time frame.
+    class constructor:
+        def __init__(self, data=None, lambtha=1.)
 
-    Methods:
-        pmf(k): Calculates the probability mass function at k.
-        cdf(k): Calculates the cumulative distribution function at k.
+    instance attributes:
+        lambtha [float]: the expected number of occurances in a given time
+
+    instance methods:
+        def pmf(self, k): calculates PMF for given number of successes
+        def cdf(self, k): calculates CDF for given number of successes
     """
 
     def __init__(self, data=None, lambtha=1.):
         """
-        Initializes the Poisson distribution.
+        class constructor
 
-        Args:
-            data (list, optional): List of observed data points.
-            lambtha (float, optional): Expected number of occurrences (λ).
+        parameters:
+            data [list]: data to be used to estimate the distibution
+            lambtha [float]: the expected number of occurances on a given time
 
-        Raises:
-            TypeError: If data is not a list.
-            ValueError: If data has fewer than two values.
-            ValueError: If lambtha is not a positive value.
+        Sets the instance attribute lambtha as a float
+        If data is not given:
+            Use the given lambtha or
+            raise ValueError if lambtha is not positive value
+        If data is given:
+            Calculate the lambtha of data
+            Raise TypeError if data is not a list
+            Raise ValueError if data does not contain at least two data points
         """
         if data is None:
-            if lambtha <= 0:
+            if lambtha < 1:
                 raise ValueError("lambtha must be a positive value")
-            self.lambtha = float(lambtha)
+            else:
+                self.lambtha = float(lambtha)
         else:
             if type(data) is not list:
                 raise TypeError("data must be a list")
-            if len(data) < 2:
+            elif len(data) < 2:
                 raise ValueError("data must contain multiple values")
-            self.lambtha = float(sum(data) / len(data))
+            else:
+                lambtha = float(sum(data) / len(data))
+                self.lambtha = lambtha
 
     def pmf(self, k):
         """
-        Calculates the PMF (probability mass function) for a given number of successes.
+        calculates the value of the PMF for a given number of successes
 
-        Args:
-            k (int): Number of occurrences (successes).
+        parameters:
+            k [int]: number of successes
+                If k is not an int, convert it to int
+                If k is out of range, return 0
 
-        Returns:
-            float: PMF value for given k.
+        return:
+            the PMF value for k
         """
-        try:
+        if type(k) is not int:
             k = int(k)
-        except (ValueError, TypeError):
-            return 0
-
         if k < 0:
             return 0
-
-        return ((self.lambtha ** k) * exp(-self.lambtha)) / factorial(k)
+        e = 2.7182818285
+        lambtha = self.lambtha
+        factorial = 1
+        for i in range(k):
+            factorial *= (i + 1)
+        pmf = ((lambtha ** k) * (e ** -lambtha)) / factorial
+        return pmf
 
     def cdf(self, k):
         """
-        Calculates the CDF (cumulative distribution function) for a given number of successes.
+        calculates the value of the CDF for a given number of successes
 
-        Args:
-            k (int): Number of occurrences (successes).
+        parameters:
+            k [int]: number of successes
+                If k is not an int, convert it to int
+                If k is out of range, return 0
 
-        Returns:
-            float: CDF value for given k.
+        return:
+            the CDF value for k
         """
-        try:
+        if type(k) is not int:
             k = int(k)
-        except (ValueError, TypeError):
-            return 0
-
         if k < 0:
             return 0
-
-        return sum(self.pmf(i) for i in range(k + 1))
-
-    def __repr__(self):
-        return f"Poisson distribution with λ = {self.lambtha}"
-
+        cdf = 0
+        for i in range(k + 1):
+            cdf += self.pmf(i)
+        return cdf
