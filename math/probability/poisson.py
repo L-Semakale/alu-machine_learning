@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 """Defines Poisson class that represents Poisson distribution"""
 
-from math import exp, factorial
-
 
 class Poisson:
     """
