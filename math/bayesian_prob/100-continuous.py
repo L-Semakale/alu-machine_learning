@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Calculates the posterior probability that the probability of developing
+"""calculates the posterior probability that the probability of developing
 severe side effects falls within a specific range given the data
 """
 
