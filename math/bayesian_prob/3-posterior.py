@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-""""Function  that calculates the posterior
+"""function  that calculates the posterior
 probability for the various hypothetical probabilities
 of developing severe side effects given the data"""
 
